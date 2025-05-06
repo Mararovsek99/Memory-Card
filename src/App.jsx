@@ -1,21 +1,21 @@
-import { createClient } from "pexels";
 import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
-  // Create a Pexels client
-  const client = createClient(
-    "iNiVxqD7dXyM7xN6nMgLT0uDOqqQcQbtsJS8XccSNp4OupZGZfQi4JKR"
-  );
+  const apiKey = "iNiVxqD7dXyM7xN6nMgLT0uDOqqQcQbtsJS8XccSNp4OupZGZfQi4JKR";
   const query = "nature";
 
   useEffect(() => {
-    // Fetch photos from Pexels
-    client.photos
-      .search({ query, per_page: 10 })
-      .then((response) => {
-        setPhotos(response.photos);
-        setShownImages(response.photos.slice(0, 6));
+    // Fetch photos from Pexels API directly
+    fetch(`https://api.pexels.com/v1/search?query=${query}&per_page=10`, {
+      headers: {
+        Authorization: apiKey,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setPhotos(data.photos);
+        setShownImages(data.photos.slice(0, 6));
       })
       .catch((error) => {
         console.error("Error fetching photos:", error);
